@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Items | Lost & Found</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>All Reported Items</h1>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+    <a href="lost.html">Report Lost</a>
+    <a href="found.html">Report Found</a>
+    <a href="claim.html">Claim</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="container">
+    <ul id="allItemsList">Loading items...</ul>
+  </div>
+
+  <script>
+    const apiBase = 'http://localhost:3000/api';
+
+    const allItemsList = document.getElementById('allItemsList');
+
+    fetch(`${apiBase}/items`)
+      .then(res => res.json())
+      .then(data => {
+        const items = data.items;
+        if (!items.length) {
+          allItemsList.innerHTML = '<li>No items found.</li>';
+          return;
+        }
+
+        allItemsList.innerHTML = '';
+        items.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${item.name}</strong> (${item.type}): ${item.description}`;
+          allItemsList.appendChild(li);
+        });
+      })
+      .catch(() => {
+        allItemsList.innerHTML = '<li>Failed to load items.</li>';
+      });
+  </script>
+</body>
+</html>
